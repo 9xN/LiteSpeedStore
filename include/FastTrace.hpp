@@ -13,7 +13,8 @@ public:
         m_start = Clock::now();
     }
 
-    ~Timer() {
+    // RAII
+    ~Timer() { 
         auto end = Clock::now();
         std::chrono::duration<double, std::milli> elapsed = end - m_start;
         m_callback(elapsed.count()); // res to -> engine
@@ -26,5 +27,5 @@ private:
 };
 
 #define TRACE_SCOPE(name, engine) Timer timer##__LINE__(name, [&](double ms) { \
-    engine.set(name, std::to_string(ms) + " ms"); \
+    engine.set(name, std::to_string(ms) + " ms", ms); \
 })
